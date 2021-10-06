@@ -2,3 +2,5 @@
 .DS_Store
 nginx/database
 nginx/dev-database
+nginx/._database
+nginx/._dev-database

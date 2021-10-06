@@ -50,14 +50,14 @@ services:
     networks:
       - cicd-network
   dev-api-service:
-    image: jaylordibe/laravel-php
+    image: jaylordibe/nginx-php
     container_name: dev-api-service
     restart: unless-stopped
     tty: true
     ports:
       - "8004:80"
     volumes:
-      - ./public/dev-api:/var/www/html
+      - ./public/dev-api.cicd.local:/var/www/html
     networks:
       - cicd-network
   dev-database-service:
