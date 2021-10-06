@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 WORKING_DIRECTORY=$(pwd)
-SOURCE_DIRECTORY=~/nginx/public/api.cicd.local
+SOURCE_DIRECTORY=~/cicd/nginx/public/cicd-api
 
 # Pull the latest changes
 cd ${SOURCE_DIRECTORY}
