@@ -49,33 +49,6 @@ services:
       - ./database:/var/lib/mysql
     networks:
       - cicd-network
-  dev-api-service:
-    image: jaylordibe/nginx-php
-    container_name: dev-api-service
-    restart: unless-stopped
-    tty: true
-    ports:
-      - "8004:80"
-    volumes:
-      - ./public/dev-api.cicd.local:/var/www/html
-    networks:
-      - cicd-network
-  dev-database-service:
-    image: mysql
-    container_name: dev-database-service
-    restart: unless-stopped
-    tty: true
-    ports:
-      - "3308:3306"
-    environment:
-      MYSQL_ROOT_PASSWORD: ${DB_DEV_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${DB_DEV_DATABASE}
-      MYSQL_USER: ${DB_DEV_USERNAME}
-      MYSQL_PASSWORD: ${DB_DEV_PASSWORD}
-    volumes:
-      - ./dev-database:/var/lib/mysql
-    networks:
-      - cicd-network
   webserver-service:
     image: nginx
     container_name: webserver-service
