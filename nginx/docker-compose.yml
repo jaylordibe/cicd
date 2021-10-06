@@ -34,7 +34,7 @@ services:
     networks:
       - cicd-network
   database-service:
-    image: mysql
+    image: mysql:8.0.25
     container_name: database-service
     restart: unless-stopped
     tty: true
