@@ -1,2 +1,4 @@
 .idea
 .DS_Store
+nginx/database
+nginx/dev-database

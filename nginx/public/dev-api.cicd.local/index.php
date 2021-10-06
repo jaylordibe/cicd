@@ -2,9 +2,9 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>WWW</title>
+        <title>DEV API</title>
     </head>
     <body>
-        <h1>Welcome to WWW!</h1>
+        <h1><?php echo 'Welcome to DEV API!'; ?></h1>
     </body>
 </html>
