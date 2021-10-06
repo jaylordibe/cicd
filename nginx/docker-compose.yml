@@ -8,7 +8,7 @@ services:
     ports:
       - "8001:80"
     volumes:
-      - ./public/www.cicd.local:/var/www/html
+      - ./public/cicd-website:/var/www/html
     networks:
       - cicd-network
   app-service:
@@ -19,7 +19,7 @@ services:
     ports:
       - "8002:80"
     volumes:
-      - ./public/app.cicd.local:/var/www/html
+      - ./public/cicd-app:/var/www/html
     networks:
       - cicd-network
   api-service:
@@ -30,7 +30,7 @@ services:
     ports:
       - "8003:80"
     volumes:
-      - ./public/api.cicd.local:/var/www/html
+      - ./public/cicd-api:/var/www/html
     networks:
       - cicd-network
   database-service:
