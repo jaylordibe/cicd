@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-SOURCE_DIRECTORY=~/nginx/public/api.cicd.local
+SOURCE_DIRECTORY=~/nginx/public/dev-api.cicd.local
 
 # Pull the latest changes
 cd ${SOURCE_DIRECTORY}
@@ -14,4 +14,4 @@ chmod -R 777 bootstrap/cache
 chmod -R 777 storage
 php artisan migrate
 "
-docker exec -t -w /var/www/html api-service bash -c "$COMMANDS"
+docker exec -t -w /var/www/html dev-api-service bash -c "$COMMANDS"
