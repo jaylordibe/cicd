@@ -15,5 +15,6 @@ ng build --configuration=staging
 "
 docker exec -t -w /var/www/html app-service bash -c "$COMMANDS"
 sudo mv dist/app .
+sud rm -r public
 sudo mv app public
 sudo cp ${WORKING_DIRECTORY}/.htaccess public/
