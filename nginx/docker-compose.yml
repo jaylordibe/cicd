@@ -9,6 +9,7 @@ services:
       - "8001:80"
     volumes:
       - ./public/website:/var/www/html
+    working_dir: /var/www/html
     networks:
       - cicd-network
   webapp-service:
@@ -20,6 +21,7 @@ services:
       - "8002:80"
     volumes:
       - ./public/webapp:/var/www/html
+    working_dir: /var/www/html
     networks:
       - cicd-network
   api-service:
@@ -31,6 +33,7 @@ services:
       - "8003:80"
     volumes:
       - ./public/api:/var/www/html
+    working_dir: /var/www/html
     networks:
       - cicd-network
   database-service:
