@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 WORKING_DIRECTORY=$(pwd)
-SOURCE_DIRECTORY=~/cicd/nginx/public/app
+SOURCE_DIRECTORY=~/cicd/nginx/public/webapp
 
 # Pull the latest changes
 cd ${SOURCE_DIRECTORY}
@@ -13,7 +13,7 @@ COMMANDS="
 npm install
 ng build --configuration=staging
 "
-docker exec -t -w /var/www/html app-service bash -c "$COMMANDS"
+docker exec -t webapp-service bash -c "$COMMANDS"
 sudo rm -r public/
 sudo mv dist/app/ public/
 sudo rm -r dist/

@@ -15,4 +15,4 @@ chmod -R 777 bootstrap/cache
 chmod -R 777 storage
 php artisan migrate
 "
-docker exec -t -w /var/www/html api-service bash -c "$COMMANDS"
+docker exec -t api-service bash -c "$COMMANDS"
