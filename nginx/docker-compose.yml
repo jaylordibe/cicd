@@ -1,7 +1,7 @@
 version: '3.7'
 services:
   website-service:
-    image: jaylordibe/nginx-php
+    image: jaylordibe/laravel-php
     container_name: website-service
     restart: unless-stopped
     tty: true
@@ -11,19 +11,19 @@ services:
       - ./public/website:/var/www/html
     networks:
       - cicd-network
-  app-service:
-    image: jaylordibe/nginx-php
-    container_name: app-service
+  webapp-service:
+    image: jaylordibe/angular-node
+    container_name: webapp-service
     restart: unless-stopped
     tty: true
     ports:
       - "8002:80"
     volumes:
-      - ./public/app:/var/www/html
+      - ./public/webapp:/var/www/html
     networks:
       - cicd-network
   api-service:
-    image: jaylordibe/nginx-php
+    image: jaylordibe/laravel-php
     container_name: api-service
     restart: unless-stopped
     tty: true
