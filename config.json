@@ -1,4 +1,5 @@
 {
+  "appName": "example",
   "rootDomain": "example.com",
   "apiDomain": "api.example.com",
   "apiRepository": "git@github.com:jaylordibe/cicd-api.git",
