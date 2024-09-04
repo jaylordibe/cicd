@@ -1,0 +1,9 @@
+{
+  "rootDomain": "example.com",
+  "apiDomain": "api.example.com",
+  "apiRepository": "git@github.com:jaylordibe/cicd-api.git",
+  "webappDomain": "app.example.com",
+  "webappRepository": "git@github.com:jaylordibe/cicd-webapp.git",
+  "websiteDomain": "www.example.com",
+  "websiteRepository": "git@github.com:jaylordibe/cicd-website.git"
+}
