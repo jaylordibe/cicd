@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+set -e
+set -a
 
 # Function to handle sed replacement depending on the operating system
 sed_replace() {
@@ -100,6 +102,7 @@ create_and_update_api_env() {
   local app_name=$(grep '"appName"' config.json | awk -F'"' '{print $4}')
 
   # Step 5: Update .env file with generated values and appName from config.json
+  sed_replace "s/APP_DEBUG=.*/APP_DEBUG=false/g" "$env_path"
   sed_replace "s/DB_HOST=.*/DB_HOST=$db_host/g" "$env_path"
   sed_replace "s/DB_DATABASE=.*/DB_DATABASE=\"$app_name\"/g" "$env_path"
   sed_replace "s/DB_USERNAME=.*/DB_USERNAME=\"$app_name\"/g" "$env_path"
@@ -168,7 +171,9 @@ clone_repositories "websiteRepository" "website"
 db_root_password=$(openssl rand -base64 12)
 db_password=$(openssl rand -base64 12)
 create_and_update_api_env "$db_root_password" "$db_password"
+source ~/cicd/nginx/public/api/.env
 create_docker_env "$db_root_password" "$db_password"
+source ~/cicd/nginx/.env
 
 # Start the services
 cd ~/cicd/nginx && ./start.sh
