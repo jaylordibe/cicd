@@ -92,6 +92,7 @@ create_and_update_api_env() {
   cp "$env_example_path" "$env_path"
 
   # Step 3: Use the shared DB passwords
+  local db_host="database-service"
   local db_root_password="$1"
   local db_password="$2"
 
@@ -99,6 +100,7 @@ create_and_update_api_env() {
   local app_name=$(grep '"appName"' config.json | awk -F'"' '{print $4}')
 
   # Step 5: Update .env file with generated values and appName from config.json
+  sed_replace "s/DB_HOST=.*/DB_HOST=\"$db_host\"/g" "$env_path"
   sed_replace "s/DB_DATABASE=.*/DB_DATABASE=\"$app_name\"/g" "$env_path"
   sed_replace "s/DB_USERNAME=.*/DB_USERNAME=\"$app_name\"/g" "$env_path"
   sed_replace "s/DB_PASSWORD=.*/DB_PASSWORD=\"$db_password\"/g" "$env_path"
