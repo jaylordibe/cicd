@@ -171,4 +171,10 @@ create_and_update_api_env "$db_root_password" "$db_password"
 create_docker_env "$db_root_password" "$db_password"
 
 # Start the services
-cd ~/cicd/nginx && ./start.sh && ./setup.sh && cd ~/cicd
+cd ~/cicd/nginx && ./start.sh
+
+while ! docker exec database-service mysql -uroot -p$DB_ROOT_PASSWORD -e "SELECT 1" >/dev/null 2>&1; do
+    sleep 1
+done
+
+cd ~/cicd/nginx && ./setup.sh && cd ~/cicd
