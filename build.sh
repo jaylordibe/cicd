@@ -148,6 +148,9 @@ EOL
   echo "Successfully created docker .env file at $docker_env_path"
 }
 
+# Stop the services
+nginx/stop.sh
+
 # Replace the config values
 replace_config_value "api.cicd.local" "apiDomain" "nginx/conf/sites-available/api.conf"
 replace_config_value "cicd.local" "rootDomain" "nginx/conf/sites-available/api.conf"
@@ -168,4 +171,4 @@ create_and_update_api_env "$db_root_password" "$db_password"
 create_docker_env "$db_root_password" "$db_password"
 
 # Start the services
-cd ~/cicd/nginx && ./stop.sh && ./start.sh && ./setup.sh
+nginx/start.sh && nginx/setup.sh
