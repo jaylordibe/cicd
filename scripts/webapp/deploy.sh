@@ -12,9 +12,9 @@ git pull
 COMMANDS="
 npm install
 ng build --configuration=production
+rm -r public/
+mv dist/cicd-webapp/browser/ public
+rm -r dist
+cp .htaccess public
 "
 docker exec -t webapp-service bash -c "$COMMANDS"
-sudo rm -r public/
-sudo mv dist/cicd-webapp/browser public/
-sudo rm -r dist/
-sudo cp ${WORKING_DIRECTORY}/.htaccess public/

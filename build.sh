@@ -171,15 +171,15 @@ clone_repositories "websiteRepository" "website"
 db_root_password=$(openssl rand -base64 12)
 db_password=$(openssl rand -base64 12)
 create_and_update_api_env "$db_root_password" "$db_password"
-source ~/cicd/nginx/public/api/.env
 create_docker_env "$db_root_password" "$db_password"
 source ~/cicd/nginx/.env
+sudo rm -r ~/cicd/nginx/database
 
 # Start the services
 cd ~/cicd/nginx && ./start.sh
 
+echo "Waiting for the containers to initialize..."
 while ! docker exec database-service mysql -uroot -p"$db_root_password" -e "SELECT 1" >/dev/null 2>&1; do
-  echo "Waiting for the containers to initialize..."
   sleep 1
 done
 
