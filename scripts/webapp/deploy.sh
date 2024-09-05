@@ -12,9 +12,11 @@ git pull
 COMMANDS="
 npm install
 ng build --configuration=production
-rm -r public
-mv dist/cicd-webapp/browser/ public
-rm -r dist
+rm -r public/
+mv dist/utakpro-app/browser/ public/
+rm -r dist/
 "
 docker exec -t webapp-service bash -c "$COMMANDS"
-cp ${WORKING_DIRECTORY}/.htaccess public
+sudo chown -R $(whoami):$(whoami) public/
+sudo chmod -R 777 public/
+cp ${WORKING_DIRECTORY}/.htaccess public/
