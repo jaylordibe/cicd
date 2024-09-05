@@ -149,7 +149,7 @@ EOL
 }
 
 # Stop the services
-nginx/stop.sh
+cd ~/cicd/nginx && ./stop.sh && cd ~/cicd
 
 # Replace the config values
 replace_config_value "api.cicd.local" "apiDomain" "nginx/conf/sites-available/api.conf"
@@ -171,4 +171,4 @@ create_and_update_api_env "$db_root_password" "$db_password"
 create_docker_env "$db_root_password" "$db_password"
 
 # Start the services
-nginx/start.sh && nginx/setup.sh
+cd ~/cicd/nginx && ./start.sh && ./setup.sh && cd ~/cicd
