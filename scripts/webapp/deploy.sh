@@ -15,6 +15,6 @@ ng build --configuration=production
 "
 docker exec -t webapp-service bash -c "$COMMANDS"
 sudo rm -r public/
-sudo mv dist/angular/ public/
+sudo mv dist/cicd-webapp/browser public/
 sudo rm -r dist/
 sudo cp ${WORKING_DIRECTORY}/.htaccess public/
