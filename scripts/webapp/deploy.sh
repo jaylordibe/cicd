@@ -18,5 +18,5 @@ rm -r dist/
 "
 docker exec -t webapp-service bash -c "$COMMANDS"
 sudo chown -R $(whoami):$(whoami) public/
-sudo chmod -R 777 public/
+sudo chmod -R 775 public/
 cp ${WORKING_DIRECTORY}/.htaccess public/
