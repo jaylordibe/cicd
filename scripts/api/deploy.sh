@@ -13,6 +13,6 @@ COMMANDS="
 composer install --no-ansi --no-interaction --no-progress --no-scripts --optimize-autoloader
 chmod -R 777 bootstrap/cache
 chmod -R 777 storage
-php artisan migrate
+php artisan migrate --force
 "
 docker exec -t api-service bash -c "$COMMANDS"

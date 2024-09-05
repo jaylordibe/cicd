@@ -11,7 +11,7 @@ git pull
 # Deploy to docker container
 COMMANDS="
 npm install
-ng build --configuration=staging
+ng build --configuration=production
 "
 docker exec -t webapp-service bash -c "$COMMANDS"
 sudo rm -r public/
