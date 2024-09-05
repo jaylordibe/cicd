@@ -173,7 +173,7 @@ create_docker_env "$db_root_password" "$db_password"
 # Start the services
 cd ~/cicd/nginx && ./start.sh
 
-while ! docker exec database-service mysql -uroot -p$DB_ROOT_PASSWORD -e "SELECT 1" >/dev/null 2>&1; do
+while ! docker exec database-service mysql -uroot -p$db_root_password -e "SELECT 1" >/dev/null 2>&1; do
     sleep 1
 done
 
