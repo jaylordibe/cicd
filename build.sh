@@ -166,3 +166,6 @@ db_root_password=$(openssl rand -base64 12)
 db_password=$(openssl rand -base64 12)
 create_and_update_api_env "$db_root_password" "$db_password"
 create_docker_env "$db_root_password" "$db_password"
+
+# Start the services
+cd nginx && ./start.sh && ./setup.sh
