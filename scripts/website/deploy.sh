@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-WORKING_DIRECTORY=$(pwd)
+WORKING_DIRECTORY=~/cicd/scripts/website
 SOURCE_DIRECTORY=~/cicd/nginx/public/website
 
 # Pull the latest changes

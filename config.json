@@ -1,4 +1,5 @@
 {
+  "appEnv": "production",
   "appName": "example",
   "rootDomain": "example.com",
   "apiDomain": "api.example.com",

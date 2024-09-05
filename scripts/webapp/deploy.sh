@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-WORKING_DIRECTORY=$(pwd)
+WORKING_DIRECTORY=~/cicd/scripts/webapp
 SOURCE_DIRECTORY=~/cicd/nginx/public/webapp
 
 # Pull the latest changes
@@ -15,6 +15,6 @@ ng build --configuration=production
 rm -r public
 mv dist/cicd-webapp/browser/ public
 rm -r dist
-cp .htaccess public
 "
 docker exec -t webapp-service bash -c "$COMMANDS"
+cp ${WORKING_DIRECTORY}/.htaccess public

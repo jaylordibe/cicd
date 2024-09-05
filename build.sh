@@ -99,9 +99,13 @@ create_and_update_api_env() {
   local db_password="$2"
 
   # Step 4: Extract appName from config.json
+  local app_env=$(grep '"appEnv"' config.json | awk -F'"' '{print $4}')
   local app_name=$(grep '"appName"' config.json | awk -F'"' '{print $4}')
+  local app_domain=$(grep '"rootDomain"' config.json | awk -F'"' '{print $4}')
 
   # Step 5: Update .env file with generated values and appName from config.json
+  sed_replace "s/APP_ENV=.*/APP_ENV=\"$app_env\"/g" "$env_path"
+  sed_replace "s/APP_DOMAIN=.*/APP_DOMAIN=\"$app_domain\"/g" "$env_path"
   sed_replace "s/APP_DEBUG=.*/APP_DEBUG=false/g" "$env_path"
   sed_replace "s/DB_HOST=.*/DB_HOST=$db_host/g" "$env_path"
   sed_replace "s/DB_DATABASE=.*/DB_DATABASE=\"$app_name\"/g" "$env_path"

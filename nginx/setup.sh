@@ -8,6 +8,7 @@ composer install --no-ansi --no-interaction --no-progress --no-scripts --optimiz
 php artisan migrate:fresh --seed --force
 php artisan key:generate --force
 php artisan passport:keys --force
+echo 'y' | php artisan passport:client --personal --name='API Personal Access Client'
 echo 'y' | php artisan passport:client --password --name='API Password Grant Client' --provider='users'
 "
-docker exec -it api-service bash -c "$COMMANDS"
+docker exec -t api-service bash -c "$COMMANDS"
