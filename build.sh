@@ -151,6 +151,45 @@ EOL
   echo "Successfully created docker .env file at $docker_env_path"
 }
 
+start_services() {
+  local db_root_password="$1"
+  cd ~/cicd/nginx && ./start.sh
+
+  echo "Waiting for the containers to initialize..."
+  while ! docker exec database-service mysql -uroot -p"$db_root_password" -e "SELECT 1" >/dev/null 2>&1; do
+    sleep 1
+  done
+
+  cd ~/cicd/nginx && ./setup.sh && cd ~/cicd
+}
+
+deploy_application() {
+  local repo_key="$1"
+  local script_folder="$2"
+  local repo_url=$(grep "\"$repo_key\"" config.json | awk -F'"' '{print $4}')
+  local deploy_script="scripts/$script_folder/deploy.sh"
+
+  # Check if the repository URL is not empty
+  if [[ -z "$repo_url" ]]; then
+    echo "Skipping deployment for $repo_key because the value is empty in config.json."
+    return 0
+  fi
+
+  # Check if the deployment script exists
+  if [[ ! -f "$deploy_script" ]]; then
+    echo "Deployment script $deploy_script does not exist for $repo_key"
+    return 0
+  fi
+
+  # Run the deployment script
+  if ! "$deploy_script"; then
+    echo "Deployment failed for $repo_key"
+    return 0
+  fi
+
+  echo "$script_folder successfully deployed"
+}
+
 # Stop the services
 cd ~/cicd/nginx && ./stop.sh && cd ~/cicd
 
@@ -176,11 +215,9 @@ source ~/cicd/nginx/.env
 sudo rm -r ~/cicd/nginx/database
 
 # Start the services
-cd ~/cicd/nginx && ./start.sh
+start_services "$db_root_password"
 
-echo "Waiting for the containers to initialize..."
-while ! docker exec database-service mysql -uroot -p"$db_root_password" -e "SELECT 1" >/dev/null 2>&1; do
-  sleep 1
-done
-
-cd ~/cicd/nginx && ./setup.sh && cd ~/cicd
+# Deploy applications
+deploy_application "apiRepository" "api"
+deploy_application "webappRepository" "webapp"
+deploy_application "websiteRepository" "website"
