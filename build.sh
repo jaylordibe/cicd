@@ -62,7 +62,7 @@ clone_repositories() {
     echo "Proceeding to replace the contents with the repository $repo_key ($repo_url)."
 
     # Remove the existing folder to ensure a clean clone
-    rm -rf "nginx/public/$destination_folder"
+    sudo rm -rf "nginx/public/$destination_folder"
   fi
 
   # Step 2: Clone the repository to the nginx/public directory
