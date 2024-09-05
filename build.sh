@@ -168,4 +168,4 @@ create_and_update_api_env "$db_root_password" "$db_password"
 create_docker_env "$db_root_password" "$db_password"
 
 # Start the services
-cd nginx && ./start.sh && ./setup.sh
+cd nginx && ./stop.sh && ./start.sh && ./setup.sh
