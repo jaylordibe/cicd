@@ -5,9 +5,9 @@ COMMANDS="
 chmod -R 777 bootstrap/cache
 chmod -R 777 storage
 composer install --no-ansi --no-interaction --no-progress --no-scripts --optimize-autoloader
-php artisan migrate:fresh --seed
-php artisan key:generate
-php artisan passport:install
-php artisan passport:keys
+php artisan migrate:fresh --seed --force
+php artisan key:generate --force
+php artisan passport:keys --force
+echo 'y' | php artisan passport:client --password --name='API Password Grant Client' --provider='users'
 "
-docker exec -t api-service bash -c "$COMMANDS"
+docker exec -it api-service bash -c "$COMMANDS"

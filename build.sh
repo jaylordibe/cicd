@@ -150,7 +150,9 @@ EOL
 
 # Replace the config values
 replace_config_value "api.cicd.local" "apiDomain" "nginx/conf/sites-available/api.conf"
+replace_config_value "cicd.local" "rootDomain" "nginx/conf/sites-available/api.conf"
 replace_config_value "webapp.cicd.local" "webappDomain" "nginx/conf/sites-available/webapp.conf"
+replace_config_value "cicd.local" "rootDomain" "nginx/conf/sites-available/webapp.conf"
 replace_config_value "www.cicd.local" "websiteDomain" "nginx/conf/sites-available/website.conf"
 replace_config_value "cicd.local" "rootDomain" "nginx/conf/sites-available/website.conf"
 
