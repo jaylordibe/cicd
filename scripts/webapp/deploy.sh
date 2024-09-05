@@ -12,7 +12,7 @@ git pull
 COMMANDS="
 npm install
 ng build --configuration=production
-rm -r public/
+rm -r public
 mv dist/cicd-webapp/browser/ public
 rm -r dist
 cp .htaccess public
