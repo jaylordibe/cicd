@@ -232,7 +232,7 @@ main() {
 
   if is_config_value_present "apiRepository"; then
     # Add the api and database services to the docker services array
-    docker_services+=("api-service", "database-service")
+    docker_services+=("api-service" "database-service")
 
     # Replace the config values
     replace_config_value "api.domain" "apiDomain" "$working_directory/nginx/conf/sites-available/api.conf"
@@ -279,6 +279,7 @@ main() {
 
   # Start the docker services
   docker_services_string="${docker_services[@]}"
+  echo "$docker_services_string"
   start_services "$db_root_password" "$docker_services_string"
 
   # Deploy applications
