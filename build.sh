@@ -27,7 +27,7 @@ replace_config_value() {
   local file_path="$3"
 
   # Step 1: Extract the value from config.json using grep and awk
-  local config_value=$(grep "\"$config_key\"" config.json | awk -F'"' '{print $4}')
+  local config_value=$(grep "\"$config_key\"" "$working_directory"/config.json | awk -F'"' '{print $4}')
 
   # Check if extraction was successful
   if [[ -z "$config_value" ]]; then
@@ -53,7 +53,7 @@ clone_repositories() {
   local destination_folder="$2"
 
   # Step 1: Extract the repository URL from config.json using grep and awk
-  local repo_url=$(grep "\"$repo_key\"" config.json | awk -F'"' '{print $4}')
+  local repo_url=$(grep "\"$repo_key\"" "$working_directory"/config.json | awk -F'"' '{print $4}')
 
   # Check if the repository URL is not empty
   if [[ -z "$repo_url" ]]; then
@@ -102,9 +102,9 @@ create_and_update_api_env() {
   local db_password="$2"
 
   # Step 4: Extract appName from config.json
-  local app_env=$(grep '"appEnv"' config.json | awk -F'"' '{print $4}')
-  local app_name=$(grep '"appName"' config.json | awk -F'"' '{print $4}')
-  local app_domain=$(grep '"rootDomain"' config.json | awk -F'"' '{print $4}')
+  local app_env=$(grep '"appEnv"' "$working_directory"/config.json | awk -F'"' '{print $4}')
+  local app_name=$(grep '"appName"' "$working_directory"/config.json | awk -F'"' '{print $4}')
+  local app_domain=$(grep '"rootDomain"' "$working_directory"/config.json | awk -F'"' '{print $4}')
 
   # Step 5: Update .env file with generated values and appName from config.json
   sed_replace "s/APP_ENV=.*/APP_ENV=\"$app_env\"/g" "$env_path"
@@ -145,7 +145,7 @@ create_docker_env() {
   local db_password="$2"
 
   # Step 2: Extract appName from config.json
-  local app_name=$(grep '"appName"' config.json | awk -F'"' '{print $4}')
+  local app_name=$(grep '"appName"' "$working_directory"/config.json | awk -F'"' '{print $4}')
 
   # Step 3: Write the variables to the .env file
   cat <<EOL > "$docker_env_path"
@@ -160,20 +160,20 @@ EOL
 
 start_services() {
   local db_root_password="$1"
-  cd "$working_directory"/nginx && ./start.sh
+  "$working_directory"/nginx/start.sh
 
   echo "Waiting for the containers to initialize..."
   while ! docker exec database-service mysql -uroot -p"$db_root_password" -e "SELECT 1" >/dev/null 2>&1; do
     sleep 1
   done
 
-  cd "$working_directory"/nginx && ./setup.sh && cd "$working_directory"
+  "$working_directory"/nginx/setup.sh
 }
 
 deploy_application() {
   local repo_key="$1"
   local script_folder="$2"
-  local repo_url=$(grep "\"$repo_key\"" config.json | awk -F'"' '{print $4}')
+  local repo_url=$(grep "\"$repo_key\"" "$working_directory"/config.json | awk -F'"' '{print $4}')
   local deploy_script="scripts/$script_folder/deploy.sh"
 
   # Check if the repository URL is not empty
@@ -198,7 +198,7 @@ deploy_application() {
 }
 
 # Stop the services
-cd "$working_directory"/nginx && ./stop.sh && cd "$working_directory"
+"$working_directory"/nginx/stop.sh
 
 # Replace the config values
 replace_config_value "api.cicd.local" "apiDomain" "nginx/conf/sites-available/api.conf"
@@ -220,7 +220,7 @@ db_password=$(openssl rand -base64 12)
 create_and_update_api_env "$db_root_password" "$db_password"
 create_docker_env "$db_root_password" "$db_password"
 source "$working_directory"/nginx/.env
-sudo rm -r "$working_directory"/nginx/database
+[ -d "$working_directory"/nginx/database ] && sudo rm -r "$working_directory"/nginx/database
 
 # Start the services
 start_services "$db_root_password"

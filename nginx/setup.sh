@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+echo "Setting up api service..."
+
 # Setup API
 COMMANDS="
 chmod -R 777 bootstrap/cache
