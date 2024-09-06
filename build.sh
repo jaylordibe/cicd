@@ -2,6 +2,9 @@
 set -e
 set -a
 
+# Declare the global variable
+working_directory=$(pwd)
+
 # Function to handle sed replacement depending on the operating system
 sed_replace() {
   local pattern="$1"
@@ -157,14 +160,14 @@ EOL
 
 start_services() {
   local db_root_password="$1"
-  cd ~/cicd/nginx && ./start.sh
+  cd "$working_directory"/nginx && ./start.sh
 
   echo "Waiting for the containers to initialize..."
   while ! docker exec database-service mysql -uroot -p"$db_root_password" -e "SELECT 1" >/dev/null 2>&1; do
     sleep 1
   done
 
-  cd ~/cicd/nginx && ./setup.sh && cd ~/cicd
+  cd "$working_directory"/nginx && ./setup.sh && cd "$working_directory"
 }
 
 deploy_application() {
@@ -195,13 +198,14 @@ deploy_application() {
 }
 
 # Stop the services
-cd ~/cicd/nginx && ./stop.sh && cd ~/cicd
+cd "$working_directory"/nginx && ./stop.sh && cd "$working_directory"
 
 # Replace the config values
 replace_config_value "api.cicd.local" "apiDomain" "nginx/conf/sites-available/api.conf"
 replace_config_value "cicd.local" "rootDomain" "nginx/conf/sites-available/api.conf"
 replace_config_value "webapp.cicd.local" "webappDomain" "nginx/conf/sites-available/webapp.conf"
 replace_config_value "cicd.local" "rootDomain" "nginx/conf/sites-available/webapp.conf"
+replace_config_value "production" "appEnv" "scripts/webapp/deploy.sh"
 replace_config_value "www.cicd.local" "websiteDomain" "nginx/conf/sites-available/website.conf"
 replace_config_value "cicd.local" "rootDomain" "nginx/conf/sites-available/website.conf"
 
@@ -215,8 +219,8 @@ db_root_password=$(openssl rand -base64 12)
 db_password=$(openssl rand -base64 12)
 create_and_update_api_env "$db_root_password" "$db_password"
 create_docker_env "$db_root_password" "$db_password"
-source ~/cicd/nginx/.env
-sudo rm -r ~/cicd/nginx/database
+source "$working_directory"/nginx/.env
+sudo rm -r "$working_directory"/nginx/database
 
 # Start the services
 start_services "$db_root_password"

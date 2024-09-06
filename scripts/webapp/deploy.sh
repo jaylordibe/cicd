@@ -11,10 +11,10 @@ git pull
 # Deploy to docker container
 COMMANDS="
 npm install
-ng build --configuration=production
-rm -r public/
-mv dist/utakpro-app/browser/ public/
-rm -r dist/
+ng build --configuration=production --output-path=dist
+[ -d public ] && rm -r public
+mv dist/browser/ public/
+[ -d dist ] && rm -r dist/
 "
 docker exec -t webapp-service bash -c "$COMMANDS"
 sudo chown -R $(whoami):$(whoami) public/
