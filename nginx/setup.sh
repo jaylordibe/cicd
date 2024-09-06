@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -e
 
 working_directory=$(pwd)
 docker_services_string="$1"
