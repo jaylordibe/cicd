@@ -1,10 +1,9 @@
 #!/usr/bin/env bash
 
-WORKING_DIRECTORY=~/cicd/scripts/website
-SOURCE_DIRECTORY=~/cicd/nginx/public/website
+working_directory=$(pwd)
 
 # Pull the latest changes
-cd ${SOURCE_DIRECTORY}
+cd "$working_directory"/nginx/public/website
 git stash
 git pull
 
