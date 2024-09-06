@@ -178,7 +178,8 @@ deploy_application() {
 
   # Check if the repository URL is not empty
   if [[ -z "$repo_url" ]]; then
-    echo "Skipping deployment for $repo_key because the value is empty in config.json."
+    echo "Skipping deployment for $repo_key and stopping $script_folder-service because the value is empty in config.json."
+    docker compose -f "$working_directory"/nginx/docker-compose.yml stop "$script_folder"-service
     return 0
   fi
 

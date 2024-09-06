@@ -8,10 +8,12 @@
 ### scripts directory
 * Contains all the deployment scripts
 
-### Starting the nginx
-* Navigate to `nginx` directory and run the start script.
+### Build and run the pipeline
+* Update the config.json file with the correct values
+* Just provide the repository of the application that you want to deploy. You can empty the other fields if you don't want to use them
+* Run the following command to build and run the pipeline
 ```
-./start.sh
+./build.sh
 ```
 
 ### Prerequisites
