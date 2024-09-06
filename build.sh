@@ -4,6 +4,7 @@ set -a
 
 # Declare the global variable
 working_directory=$(pwd)
+current_directory="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # Function to handle sed replacement depending on the operating system
 sed_replace() {
