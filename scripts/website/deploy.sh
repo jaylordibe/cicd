@@ -2,6 +2,7 @@
 set -e
 
 working_directory=$(pwd)
+current_directory="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # Pull the latest changes
 cd "$working_directory"/nginx/public/website

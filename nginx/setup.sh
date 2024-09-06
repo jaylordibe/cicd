@@ -2,6 +2,7 @@
 set -e
 
 working_directory=$(pwd)
+current_directory="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 docker_services_string="$1"
 
 if [[ "$docker_services_string" == *"api-service"* ]]; then
