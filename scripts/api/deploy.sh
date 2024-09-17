@@ -20,3 +20,6 @@ chmod -R 777 storage
 php artisan migrate --force
 "
 docker exec -t api-service bash -c "$commands"
+
+# Navigate back to the working directory
+cd $working_dir

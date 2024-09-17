@@ -1,9 +1,16 @@
 #!/usr/bin/env bash
 set -e
 
-echo "Stopping docker services..."
+echo "Stopping docker services/containers..."
 
-working_directory=$(pwd)
-current_directory="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+working_dir=$(pwd)
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-docker compose -f "$working_directory"/nginx/docker-compose.yml down
+# Navigate to the script directory
+cd $script_dir
+
+# Stop the docker services/containers
+docker compose down
+
+# Navigate back to the working directory
+cd $working_dir

@@ -24,3 +24,6 @@ docker exec -t webapp-service bash -c "$commands"
 sudo chown -R $(whoami) public/
 sudo chmod -R 775 public/
 cp ../../../scripts/webapp/.htaccess public/
+
+# Navigate back to the working directory
+cd $working_dir

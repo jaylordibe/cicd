@@ -1,10 +1,19 @@
 #!/usr/bin/env bash
 set -e
 
-echo "Starting docker services..."
+echo "Starting docker services/containers..."
 
-working_directory=$(pwd)
-current_directory="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+working_dir=$(pwd)
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# Navigate to the script directory
+cd $script_dir
+
+# Get the docker services string parameter
 docker_services_string="$1"
 
-docker compose -f "$working_directory"/nginx/docker-compose.yml up -d $docker_services_string
+# Start the docker services/containers
+docker compose up -d $docker_services_string
+
+# Navigate back to the working directory
+cd $working_dir

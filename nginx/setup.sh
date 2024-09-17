@@ -1,10 +1,18 @@
 #!/usr/bin/env bash
 set -e
 
-working_directory=$(pwd)
-current_directory="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+echo "Setting up docker services/containers..."
+
+working_dir=$(pwd)
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# Navigate to the script directory
+cd $script_dir
+
+# Get the docker services string parameter
 docker_services_string="$1"
 
+# Setup the api service
 if [[ "$docker_services_string" == *"api-service"* ]]; then
   echo "Setting up api service..."
   commands="
@@ -20,7 +28,11 @@ if [[ "$docker_services_string" == *"api-service"* ]]; then
   docker exec -t api-service bash -c "$commands"
 fi
 
+# Setup the webapp service
 if [[ "$docker_services_string" == *"webapp-service"* ]]; then
   echo "Setting up webapp service..."
   docker exec -t webapp-service bash -c "echo 'n' | ng analytics disable"
 fi
+
+# Navigate back to the working directory
+cd $working_dir

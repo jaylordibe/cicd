@@ -19,3 +19,6 @@ chmod -R 777 bootstrap/cache
 chmod -R 777 storage
 "
 docker exec -t website-service bash -c "$commands"
+
+# Navigate back to the working directory
+cd $working_dir
