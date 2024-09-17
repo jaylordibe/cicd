@@ -1,18 +1,21 @@
 #!/usr/bin/env bash
 set -e
 
-working_directory=$(pwd)
-current_directory="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+working_dir=$(pwd)
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# Navigate to the script directory
+cd $script_dir
 
 # Pull the latest changes
-cd "$working_directory"/nginx/public/website
+cd ../../nginx/public/website
 git stash
 git pull
 
 # Deploy to docker container
-COMMANDS="
+commands="
 composer install --no-ansi --no-interaction --no-progress --no-scripts --optimize-autoloader
 chmod -R 777 bootstrap/cache
 chmod -R 777 storage
 "
-docker exec -t website-service bash -c "$COMMANDS"
+docker exec -t website-service bash -c "$commands"

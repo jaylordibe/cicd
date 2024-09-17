@@ -1,23 +1,26 @@
 #!/usr/bin/env bash
 set -e
 
-working_directory=$(pwd)
-current_directory="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+working_dir=$(pwd)
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# Navigate to the script directory
+cd $script_dir
 
 # Pull the latest changes
-cd "$working_directory"/nginx/public/webapp
+cd ../../nginx/public/webapp
 git stash
 git pull
 
 # Deploy to docker container
-COMMANDS="
+commands="
+[ -d public ] && rm -r public/
+[ -d dist ] && rm -r dist/
 npm install
 echo 'n' | ng build --configuration=production --output-path=dist
-[ -d public ] && rm -r public
 mv dist/browser/ public/
-[ -d dist ] && rm -r dist/
 "
-docker exec -t webapp-service bash -c "$COMMANDS"
+docker exec -t webapp-service bash -c "$commands"
 sudo chown -R $(whoami) public/
 sudo chmod -R 775 public/
-cp "$working_directory"/scripts/webapp/.htaccess public/
+cp ../../../scripts/webapp/.htaccess public/
