@@ -5,7 +5,7 @@ working_dir=$(pwd)
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # Navigate to the script directory
-cd $script_dir
+cd "$script_dir"
 
 # Pull the latest changes
 cd ../../nginx/public/webapp
@@ -26,4 +26,4 @@ sudo chmod -R 775 public/
 cp ../../../scripts/webapp/.htaccess public/
 
 # Navigate back to the working directory
-cd $working_dir
+cd "$working_dir"

@@ -227,7 +227,7 @@ deploy_application() {
 
 main() {
   # Navigate to the script directory
-  cd $script_dir
+  cd "$script_dir"
 
   # Stop the existing docker services
   nginx/stop.sh
@@ -298,6 +298,8 @@ main() {
   deploy_application "apiRepository" "api"
   deploy_application "webappRepository" "webapp"
   deploy_application "websiteRepository" "website"
+
+  cd "$working_dir"
 }
 
 main

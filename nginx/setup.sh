@@ -7,7 +7,7 @@ working_dir=$(pwd)
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # Navigate to the script directory
-cd $script_dir
+cd "$script_dir"
 
 # Get the docker services string parameter
 docker_services_string="$1"
@@ -35,4 +35,4 @@ if [[ "$docker_services_string" == *"webapp-service"* ]]; then
 fi
 
 # Navigate back to the working directory
-cd $working_dir
+cd "$working_dir"

@@ -5,7 +5,7 @@ working_dir=$(pwd)
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # Navigate to the script directory
-cd $script_dir
+cd "$script_dir"
 
 # Pull the latest changes
 cd ../../nginx/public/website
@@ -21,4 +21,4 @@ chmod -R 777 storage
 docker exec -t website-service bash -c "$commands"
 
 # Navigate back to the working directory
-cd $working_dir
+cd "$working_dir"
