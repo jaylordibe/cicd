@@ -26,7 +26,7 @@ get_config_value() {
   local config_key="$1"
   local config_value=$(grep "\"$config_key\"" config.json | awk -F'"' '{print $4}')
 
-  return config_value
+  echo "$config_value"
 }
 
 # Function to check if a config value is present in the config.json file
