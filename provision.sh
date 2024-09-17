@@ -21,10 +21,18 @@ sed_replace() {
   fi
 }
 
+# Function to get the config value in the config.json file
+get_config_value() {
+  local config_key="$1"
+  local config_value=$(grep "\"$config_key\"" config.json | awk -F'"' '{print $4}')
+
+  return config_value
+}
+
 # Function to check if a config value is present in the config.json file
 is_config_value_present() {
   local config_key="$1"
-  local config_value=$(grep "\"$config_key\"" "$working_dir"/config.json | awk -F'"' '{print $4}')
+  local config_value=$(get_config_value "$config_key")
 
   if [[ -z "$config_value" ]]; then
     echo "Empty $config_key value from config.json"
@@ -41,7 +49,7 @@ replace_config_value() {
   local file_path="$3"
 
   # Step 1: Extract the value from config.json using grep and awk
-  local config_value=$(grep "\"$config_key\"" "$working_dir"/config.json | awk -F'"' '{print $4}')
+  local config_value=$(get_config_value "$config_key")
 
   # Check if extraction was successful
   if [[ -z "$config_value" ]]; then
@@ -67,7 +75,7 @@ clone_repositories() {
   local destination_folder="$2"
 
   # Step 1: Extract the repository URL from config.json using grep and awk
-  local repo_url=$(grep "\"$repo_key\"" "$working_dir"/config.json | awk -F'"' '{print $4}')
+  local repo_url=$(get_config_value "$repo_key")
 
   # Check if the repository URL is not empty
   if [[ -z "$repo_url" ]]; then
@@ -76,16 +84,16 @@ clone_repositories() {
   fi
 
   # Check if the destination folder already exists
-  if [[ -d "$working_dir/nginx/public/$destination_folder" ]]; then
+  if [[ -d "nginx/public/$destination_folder" ]]; then
     echo "The destination folder 'nginx/public/$destination_folder' already exists."
     echo "Proceeding to replace the contents with the repository $repo_key ($repo_url)."
 
     # Remove the existing folder to ensure a clean clone
-    sudo rm -rf "$working_dir/nginx/public/$destination_folder"
+    sudo rm -rf "nginx/public/$destination_folder"
   fi
 
   # Step 2: Clone the repository to the nginx/public directory
-  git clone "$repo_url" "$working_dir/nginx/public/$destination_folder"
+  git clone "$repo_url" "nginx/public/$destination_folder"
 
   # Check if git clone succeeded
   if [[ $? -eq 0 ]]; then
@@ -98,8 +106,8 @@ clone_repositories() {
 
 # Function to create .env file from .env.example and update variables
 create_and_update_api_env() {
-  local env_example_path="$working_dir/nginx/public/api/.env.example"
-  local env_path="$working_dir/nginx/public/api/.env"
+  local env_example_path="nginx/public/api/.env.example"
+  local env_path="nginx/public/api/.env"
 
   # Step 1: Check if .env.example file exists
   if [[ ! -f "$env_example_path" ]]; then
@@ -116,9 +124,9 @@ create_and_update_api_env() {
   local db_password="$2"
 
   # Step 4: Extract appName from config.json
-  local app_env=$(grep '"appEnv"' "$working_dir"/config.json | awk -F'"' '{print $4}')
-  local app_name=$(grep '"appName"' "$working_dir"/config.json | awk -F'"' '{print $4}')
-  local app_domain=$(grep '"rootDomain"' "$working_dir"/config.json | awk -F'"' '{print $4}')
+  local app_env=$(get_config_value "appEnv")
+  local app_name=$(get_config_value "appName")
+  local app_domain=$(get_config_value "rootDomain")
 
   # Step 5: Update .env file with generated values and appName from config.json
   sed_replace "s/APP_ENV=.*/APP_ENV=\"$app_env\"/g" "$env_path"
@@ -146,7 +154,7 @@ DB_ROOT_PASSWORD=\"$db_root_password\"\\
 
 # Function to create a docker .env file in the project directory
 create_docker_env() {
-  local docker_env_path="$working_dir/nginx/.env"
+  local docker_env_path="nginx/.env"
 
   # Step 1: Check if the docker .env file exists and remove it
   if [[ -f "$docker_env_path" ]]; then
@@ -159,7 +167,7 @@ create_docker_env() {
   local db_password="$2"
 
   # Step 2: Extract appName from config.json
-  local app_name=$(grep '"appName"' "$working_dir"/config.json | awk -F'"' '{print $4}')
+  local app_name=$(get_config_value "appName")
 
   # Step 3: Write the variables to the .env file
   cat <<EOL > "$docker_env_path"
@@ -177,7 +185,7 @@ start_services() {
   local docker_services_string="$2"
 
   # Start the docker services
-  "$working_dir"/nginx/start.sh "$docker_services_string"
+  nginx/start.sh "$docker_services_string"
 
   if [[ "$docker_services_string" == *"api-service"* ]]; then
     echo "Waiting for the containers to initialize..."
@@ -187,14 +195,14 @@ start_services() {
   fi
 
   # Setup the services
-  "$working_dir"/nginx/setup.sh "$docker_services_string"
+  nginx/setup.sh "$docker_services_string"
 }
 
 deploy_application() {
   local repo_key="$1"
   local script_folder="$2"
-  local repo_url=$(grep "\"$repo_key\"" "$working_dir"/config.json | awk -F'"' '{print $4}')
-  local deploy_script="$working_dir/scripts/$script_folder/deploy.sh"
+  local repo_url=$(get_config_value "$repo_key")
+  local deploy_script="scripts/$script_folder/deploy.sh"
 
   # Check if the repository URL is not empty
   if [[ -z "$repo_url" ]]; then
@@ -222,10 +230,10 @@ main() {
   cd $script_dir
 
   # Stop the existing docker services
-  "$working_dir"/nginx/stop.sh
+  nginx/stop.sh
 
   # Remove the public folder if it exists
-  [ -d "$working_dir/nginx/public" ] && sudo rm -r "$working_dir/nginx/public"
+  [ -d "nginx/public" ] && sudo rm -r "nginx/public"
 
   # Generate database passwords
   local db_root_password=$(openssl rand -base64 12)
@@ -239,8 +247,8 @@ main() {
     docker_services+=("api-service" "database-service")
 
     # Replace the config values
-    replace_config_value "api.domain" "apiDomain" "$working_dir/nginx/conf/sites-available/api.conf"
-    replace_config_value "root.domain" "rootDomain" "$working_dir/nginx/conf/sites-available/api.conf"
+    replace_config_value "api.domain" "apiDomain" "nginx/conf/sites-available/api.conf"
+    replace_config_value "root.domain" "rootDomain" "nginx/conf/sites-available/api.conf"
 
     # Clone the repositories
     clone_repositories "apiRepository" "api"
@@ -254,9 +262,9 @@ main() {
     docker_services+=("webapp-service")
 
     # Replace the config values
-    replace_config_value "webapp.domain" "webappDomain" "$working_dir/nginx/conf/sites-available/webapp.conf"
-    replace_config_value "root.domain" "rootDomain" "$working_dir/nginx/conf/sites-available/webapp.conf"
-    replace_config_value "app.env" "appEnv" "$working_dir/scripts/webapp/deploy.sh"
+    replace_config_value "webapp.domain" "webappDomain" "nginx/conf/sites-available/webapp.conf"
+    replace_config_value "root.domain" "rootDomain" "nginx/conf/sites-available/webapp.conf"
+    replace_config_value "app.env" "appEnv" "scripts/webapp/deploy.sh"
 
     # Clone the repositories
     clone_repositories "webappRepository" "webapp"
@@ -267,8 +275,8 @@ main() {
     docker_services+=("website-service")
 
     # Replace the config values
-    replace_config_value "website.domain" "websiteDomain" "$working_dir/nginx/conf/sites-available/website.conf"
-    replace_config_value "root.domain" "rootDomain" "$working_dir/nginx/conf/sites-available/website.conf"
+    replace_config_value "website.domain" "websiteDomain" "nginx/conf/sites-available/website.conf"
+    replace_config_value "root.domain" "rootDomain" "nginx/conf/sites-available/website.conf"
 
     # Clone the repositories
     clone_repositories "websiteRepository" "website"
@@ -276,10 +284,10 @@ main() {
 
   # Create the docker .env file
   create_docker_env "$db_root_password" "$db_password"
-  source "$working_dir"/nginx/.env
+  source nginx/.env
 
   # Remove the database folder if it exists
-  [ -d "$working_dir"/nginx/database ] && sudo rm -r "$working_dir"/nginx/database
+  [ -d nginx/database ] && sudo rm -r nginx/database
 
   # Start the docker services
   docker_services_string="${docker_services[@]}"
