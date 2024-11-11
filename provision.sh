@@ -280,6 +280,8 @@ main() {
 
     # Clone the repositories
     clone_repositories "websiteRepository" "website"
+  else
+    rm nginx/conf/sites-available/website.conf
   fi
 
   # Create the docker .env file
