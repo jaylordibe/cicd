@@ -60,9 +60,9 @@ services:
       - "80:80"
       - "443:443"
     volumes:
+      - ./conf/dhparam.pem:/etc/nginx/dhparam.pem
       - ./conf/nginx.conf:/etc/nginx/nginx.conf
       - ./conf/sites-available:/etc/nginx/conf.d
-      - ./conf/ssl:/etc/nginx/ssl
     networks:
       - cicd-network
 networks:
