@@ -16,9 +16,9 @@ git pull
 commands="
 [ -d public ] && rm -r public/
 [ -d dist ] && rm -r dist/
-npm install
+yarn install
 echo 'n' | ng build --configuration=production --output-path=dist
-mv dist/browser/ public/
+mv dist/ public/
 "
 docker exec -t webapp-service bash -c "$commands"
 sudo chown -R $(whoami) public/
