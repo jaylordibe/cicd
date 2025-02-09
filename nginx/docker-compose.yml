@@ -1,6 +1,6 @@
 services:
   website-service:
-    image: jaylordibe/laravel-php
+    image: jaylordibe/laravel-php:8.3
     container_name: website-service
     restart: unless-stopped
     tty: true
@@ -12,7 +12,7 @@ services:
     networks:
       - cicd-network
   webapp-service:
-    image: jaylordibe/angular-node
+    image: jaylordibe/nginx-srv
     container_name: webapp-service
     restart: unless-stopped
     tty: true
@@ -60,9 +60,9 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-#      - ./conf/dhparam.pem:/etc/nginx/dhparam.pem
-      - ./conf/nginx.conf:/etc/nginx/nginx.conf
-      - ./conf/sites-available:/etc/nginx/conf.d
+#      - ./config/dhparam.pem:/etc/nginx/dhparam.pem
+      - ./config/nginx.conf:/etc/nginx/nginx.conf
+      - ./config/conf.d:/etc/nginx/conf.d
     networks:
       - cicd-network
 networks:

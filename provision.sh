@@ -247,8 +247,8 @@ main() {
     docker_services+=("api-service" "database-service")
 
     # Replace the config values
-    replace_config_value "api.domain" "apiDomain" "nginx/conf/sites-available/api.conf"
-    replace_config_value "root.domain" "rootDomain" "nginx/conf/sites-available/api.conf"
+    replace_config_value "api.domain" "apiDomain" "nginx/config/conf.d/api.conf"
+    replace_config_value "root.domain" "rootDomain" "nginx/config/conf.d/api.conf"
 
     # Clone the repositories
     clone_repositories "apiRepository" "api"
@@ -262,8 +262,8 @@ main() {
     docker_services+=("webapp-service")
 
     # Replace the config values
-    replace_config_value "webapp.domain" "webappDomain" "nginx/conf/sites-available/webapp.conf"
-    replace_config_value "root.domain" "rootDomain" "nginx/conf/sites-available/webapp.conf"
+    replace_config_value "webapp.domain" "webappDomain" "nginx/config/conf.d/webapp.conf"
+    replace_config_value "root.domain" "rootDomain" "nginx/config/conf.d/webapp.conf"
     replace_config_value "app.env" "appEnv" "scripts/webapp/deploy.sh"
 
     # Clone the repositories
@@ -275,13 +275,13 @@ main() {
     docker_services+=("website-service")
 
     # Replace the config values
-    replace_config_value "website.domain" "websiteDomain" "nginx/conf/sites-available/website.conf"
-    replace_config_value "root.domain" "rootDomain" "nginx/conf/sites-available/website.conf"
+    replace_config_value "website.domain" "websiteDomain" "nginx/config/conf.d/website.conf"
+    replace_config_value "root.domain" "rootDomain" "nginx/config/conf.d/website.conf"
 
     # Clone the repositories
     clone_repositories "websiteRepository" "website"
   else
-    rm nginx/conf/sites-available/website.conf
+    rm nginx/config/conf.d/website.conf
   fi
 
   # Create the docker .env file
