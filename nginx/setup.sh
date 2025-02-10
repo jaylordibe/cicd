@@ -24,6 +24,7 @@ if [[ "$docker_services_string" == *"api-service"* ]]; then
   php artisan passport:keys --force
   echo 'y' | php artisan passport:client --personal --name='API Personal Access Client'
   echo 'y' | php artisan passport:client --password --name='API Password Grant Client' --provider='users'
+  php artisan storage:link
   "
   docker exec -t api-service bash -c "$commands"
 fi
