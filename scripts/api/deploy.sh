@@ -18,7 +18,7 @@ composer install --no-ansi --no-interaction --no-progress --no-scripts --optimiz
 chmod -R 777 bootstrap/cache
 chmod -R 777 storage
 php artisan migrate --force
-php artisan queue:restart
+php artisan horizon:terminate
 "
 docker exec -t api-service bash -c "$commands"
 
