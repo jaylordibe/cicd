@@ -255,6 +255,8 @@ main() {
 
     # Create and update the api .env file
     create_and_update_api_env "$db_root_password" "$db_password"
+  else
+    rm nginx/config/conf.d/api.conf
   fi
 
   if is_config_value_present "webappRepository"; then
@@ -268,6 +270,8 @@ main() {
 
     # Clone the repositories
     clone_repositories "webappRepository" "webapp"
+  else
+    rm nginx/config/conf.d/webapp.conf
   fi
 
   if is_config_value_present "websiteRepository"; then
