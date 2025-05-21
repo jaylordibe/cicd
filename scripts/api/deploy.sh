@@ -15,6 +15,7 @@ git pull
 # Deploy to docker container
 commands="
 composer install --no-ansi --no-interaction --no-progress --no-scripts --optimize-autoloader
+composer dump-autoload --optimize --no-dev --classmap-authoritative
 chmod -R 777 bootstrap/cache
 chmod -R 777 storage
 php artisan migrate --force
