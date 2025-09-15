@@ -16,8 +16,6 @@ docker_services_string="$1"
 if [[ "$docker_services_string" == *"api-service"* ]]; then
   echo "Setting up api service..."
   commands="
-  chmod -R 777 bootstrap/cache
-  chmod -R 777 storage
   composer install --no-ansi --no-interaction --no-progress --no-scripts --optimize-autoloader
   php artisan migrate:fresh --seed --force
   php artisan key:generate --force
@@ -25,6 +23,8 @@ if [[ "$docker_services_string" == *"api-service"* ]]; then
   echo 'y' | php artisan passport:client --personal --name='API Personal Access Client'
   echo 'y' | php artisan passport:client --password --name='API Password Grant Client' --provider='users'
   php artisan storage:link
+  chmod -R 777 bootstrap/cache
+  chmod -R 777 storage
   "
   docker exec -t api-service bash -c "$commands"
 fi
