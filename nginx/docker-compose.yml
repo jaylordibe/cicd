@@ -1,6 +1,6 @@
 services:
   website-service:
-    image: jaylordibe/laravel-php:8.3
+    image: jaylordibe/laravel-php
     container_name: website-service
     restart: unless-stopped
     tty: true
