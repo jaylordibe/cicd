@@ -18,6 +18,7 @@ composer install --no-ansi --no-interaction --no-progress --no-scripts --optimiz
 composer dump-autoload --optimize
 chmod -R 777 bootstrap/cache
 chmod -R 777 storage
+chmod 600 storage/oauth-private.key storage/oauth-public.key 2>/dev/null || true
 php artisan migrate --force
 php artisan horizon:terminate
 "

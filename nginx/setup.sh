@@ -25,6 +25,7 @@ if [[ "$docker_services_string" == *"api-service"* ]]; then
   php artisan storage:link
   chmod -R 777 bootstrap/cache
   chmod -R 777 storage
+  chmod 600 storage/oauth-private.key storage/oauth-public.key 2>/dev/null || true
   "
   docker exec -t api-service bash -c "$commands"
 fi
