@@ -20,12 +20,14 @@ if [[ "$docker_services_string" == *"api-service"* ]]; then
   php artisan migrate:fresh --seed --force
   php artisan key:generate --force
   php artisan passport:keys --force
-  echo 'y' | php artisan passport:client --personal --name='API Personal Access Client'
-  echo 'y' | php artisan passport:client --password --name='API Password Grant Client' --provider='users'
+  php artisan passport:client --personal --name='API Personal Access Client' --provider=users --no-interaction
+  php artisan passport:client --password --name='API Password Grant Client' --provider=users --no-interaction
   php artisan storage:link
-  chmod -R 777 bootstrap/cache
-  chmod -R 777 storage
-  chmod 600 storage/oauth-private.key storage/oauth-public.key 2>/dev/null || true
+  chmod -R 775 bootstrap/cache
+  chmod -R 775 storage
+  chown -R www-data:www-data storage
+  chmod 600 storage/oauth-private.key
+  chmod 600 storage/oauth-public.key
   "
   docker exec -t api-service bash -c "$commands"
 fi
