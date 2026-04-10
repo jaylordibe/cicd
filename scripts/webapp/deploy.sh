@@ -9,8 +9,7 @@ cd "$script_dir"
 
 # Pull the latest changes
 cd ../../nginx/public/webapp
-git stash
-git pull
+git pull --rebase
 
 # Deploy to docker container
 commands="
